@@ -18,6 +18,8 @@ app.use(compression({
   filter: (req, res) => (!req.headers['x-no-compression'] && compression.filter(req, res)) || false,
 }))
 
+app.use(express.static('public'))
+
 app.use((req, res, next) => {
   var header = { 'Access-Control-Allow-Origin': '*' }
   for (var i in req.headers) {
@@ -30,7 +32,6 @@ app.use((req, res, next) => {
 })
 
 app.use(bodyParser.json())
-
 // app.set('trust proxy', 1) // trust first proxy
 // app.use(session({
 //   secret: 'eec!secret',
@@ -59,3 +60,9 @@ app.use('/api', require('./api'))
 app.listen(config.port, () => {
   console.log('ready', config.port)
 })
+
+// setInterval(() => {
+//   let num = ('' + Math.floor(Math.random() * 1000000)).padStart(6, '0')
+//   console.log('lotto=', num)
+//   socket.publish('lotto', num)
+// }, 5000)
