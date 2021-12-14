@@ -3,9 +3,10 @@ module.exports = {
   port: 7000,
   db: {
     host : 'localhost',
-    user : 'demo',
-    password : '1234',
-    database : 'demo'
+    port: '3306',
+    user : 'root',
+    password : '',
+    database : 'blog_project'
   },
   socket: {
     url: 'https://socket.bpcd.xenex.io',

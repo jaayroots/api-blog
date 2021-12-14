@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const config = require('./config')
 const socket = require('./lib/socket')
-
+var path = require("path")
 // const session = require('express-session')
 // const MongoDBStore = require('connect-mongodb-session')(session)
 
@@ -44,21 +44,22 @@ app.use(bodyParser.json())
 //   resave: true,
 //   saveUninitialized: true,
 // }))
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use((req, res, next) => {
   req.db = require('./lib/db')
   next()
 })
 
-app.use((req, res, next) => {
-  req.$socket = socket
-  next()
-})
+// app.use((req, res, next) => {
+//   req.$socket = socket
+//   next()
+// })
 
 app.use('/api', require('./api'))
 
 app.listen(config.port, () => {
-  console.log('ready', config.port)
+  console.log('ready to use ==> port:', config.port)
 })
 
 // setInterval(() => {
