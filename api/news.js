@@ -27,7 +27,6 @@ router.get("/get-news", async (req, res) => {
 });
 
 router.post("/createAndUpdate-news", async (req, res) => {
-
   let data = req.body.item;
   try {
     if (data.id == 0) {
@@ -40,10 +39,13 @@ router.post("/createAndUpdate-news", async (req, res) => {
         active: 1,
         createBy: "admin_01",
         createDate: currentdate,
-        updateBy: "",
-        updateDate: "",
+        updateBy: null,
+        updateDate: null,
       };
-      let returnId = await req.db("content_news").insert(_insertContent).returning("id");
+      let returnId = await req
+        .db("content_news")
+        .insert(_insertContent)
+        .returning("id");
       res.send({
         ok: returnId,
       });
@@ -56,6 +58,9 @@ router.post("/createAndUpdate-news", async (req, res) => {
         active: 1,
         updateBy: "admin_01",
         updateDate: currentdate,
+      });
+      res.send({
+        ok: "",
       });
     }
   } catch (e) {

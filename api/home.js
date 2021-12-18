@@ -34,8 +34,8 @@ router.post("/createAndUpdate-home", async (req, res) => {
         active: 1,
         createBy: "admin_01",
         createDate: currentdate,
-        updateBy: "",
-        updateDate: "",
+        updateBy: null,
+        updateDate: null,
       };
       await req.db("content_home").insert(_insertContent);
       res.send({

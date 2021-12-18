@@ -29,8 +29,8 @@ router.post("/createAndUpdate-place", async (req, res) => {
         active: 1,
         createBy: "admin_01",
         createDate: currentdate,
-        updateBy: "",
-        updateDate: "",
+        updateBy: null,
+        updateDate: null,
       };
       let returnId = await req
         .db("content_place")
@@ -48,6 +48,9 @@ router.post("/createAndUpdate-place", async (req, res) => {
         active: 1,
         updateBy: "admin_01",
         updateDate: currentdate,
+      });
+      res.send({
+        ok: "",
       });
     }
   } catch (e) {

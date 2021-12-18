@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 var multer = require("multer");
 var upload = multer({dest: "./uploads/"});
 var fs = require("fs");
@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
   },
 });
 var upload = multer({storage: storage});
-module.exports = router
+module.exports = router;
 
 router.post("/uploadProfilePicture", upload.single("file"), (req, res) => {
   res.json({
@@ -25,12 +25,12 @@ router.post("/uploadProfilePicture", upload.single("file"), (req, res) => {
 // router.post("/uploadProfilePicture", type, function (req, res) {
 //   try {
 //     console.log(req.file);
-    
+
 //   // var tmp_path = req.file.path;
 //   // var target_path = "uploads/" + req.file.originalname;
 //   // // var src = fs.createReadStream(tmp_path);
 //   // var dest = fs.createWriteStream(target_path);
-    
+
 //       res.send({
 //         ok: true,
 //       });
@@ -39,7 +39,7 @@ router.post("/uploadProfilePicture", upload.single("file"), (req, res) => {
 //     }
 // });
 
-router.get('/get-content', async (req, res) => {
+router.get("/get-content", async (req, res) => {
   try {
     let rows = await req
       .db("content_home")
@@ -48,14 +48,14 @@ router.get('/get-content', async (req, res) => {
     res.send({
       ok: true,
       list: rows,
-    })
+    });
   } catch (e) {
-    res.send({ ok: false, error: e.message })
+    res.send({ok: false, error: e.message});
   }
-})
+});
 
-router.post('/create-content', async (req, res) => {
-  let data = req.body
+router.post("/create-content", async (req, res) => {
+  let data = req.body;
   try {
     var currentdate = new Date();
     let _insertContent = {
@@ -65,44 +65,41 @@ router.post('/create-content', async (req, res) => {
       active: 1,
       createBy: "admin_01",
       createDate: currentdate,
-      updateBy: "",
-      updateDate: "",
+      updateBy: null,
+      updateDate: null,
     };
     await req.db("content_home").insert(_insertContent);
     res.send({
       ok: true,
-    })
+    });
   } catch (e) {
-    res.send({ ok: false, error: e.message })
+    res.send({ok: false, error: e.message});
   }
-})
+});
 
-router.post('/delete-content', async (req, res) => {
-  let data = req.body
+router.post("/delete-content", async (req, res) => {
+  let data = req.body;
   try {
     var currentdate = new Date();
     let DeleteContent = {
       active: 0,
       createDate: currentdate,
-      updateBy: 'admin_01',
+      updateBy: "admin_01",
       updateDate: currentdate,
     };
-    await req
-      .db("content_home")
-      .where("id", data.id)
-      .update({
-        active: 0,
-        createDate: currentdate,
-        updateBy: "admin_01",
-        updateDate: currentdate,
-      });
+    await req.db("content_home").where("id", data.id).update({
+      active: 0,
+      createDate: currentdate,
+      updateBy: "admin_01",
+      updateDate: currentdate,
+    });
     res.send({
       ok: true,
-    })
+    });
   } catch (e) {
-    res.send({ ok: false, error: e.message })
+    res.send({ok: false, error: e.message});
   }
-})
+});
 
 router.post("/get-content", async (req, res) => {
   let data = req.body;
@@ -127,4 +124,3 @@ router.post("/get-content", async (req, res) => {
     res.send({ok: false, error: e.message});
   }
 });
-
