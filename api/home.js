@@ -4,7 +4,9 @@ const router = express.Router();
 module.exports = router;
 //     http://localhost:7000/api/student?class=1
 
+
 router.get("/get-home", async (req, res) => {
+
   try {
     let rows = await req
       .db("content_home")
@@ -22,6 +24,7 @@ router.get("/get-home", async (req, res) => {
 });
 
 router.post("/createAndUpdate-home", async (req, res) => {
+  
   let data = req.body.item;
   try {
     if (data.id == 0) {
@@ -43,6 +46,8 @@ router.post("/createAndUpdate-home", async (req, res) => {
       });
     } else {
       var currentdate = new Date();
+      // console.log(data.contentDetail);
+      // return
       await req.db("content_home").where("id", data.id).update({
         contentName: data.contentName,
         contentPreview: data.contentPreview,

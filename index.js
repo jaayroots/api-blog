@@ -1,8 +1,11 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const config = require('./config')
-const socket = require('./lib/socket')
-var path = require("path")
+const express = require("express");
+const bodyParser = require("body-parser");
+const config = require("./config");
+const socket = require("./lib/socket");
+var path = require("path");
+const cors = require("cors");
+
+
 // const session = require('express-session')
 // const MongoDBStore = require('connect-mongodb-session')(session)
 
@@ -11,27 +14,41 @@ var path = require("path")
 //   collection: 'sessions'
 // })
 
-const app = express()
+const app = express();
+// app.use(express.urlencoded({extenede:true,parameterLimit:100000,limit:"500mb"}));
+// app.use(express.json());
+app.use(express.json({limit: "50mb"}));
+app.use(express.urlencoded({limit: "50mb"}));
 
-const compression = require('compression')
-app.use(compression({
-  filter: (req, res) => (!req.headers['x-no-compression'] && compression.filter(req, res)) || false,
-}))
+const compression = require("compression");
+app.use(
+  compression({
+    filter: (req, res) =>
+      (!req.headers["x-no-compression"] && compression.filter(req, res)) ||
+      false,
+  })
+);
 
-app.use(express.static('public'))
+app.use(express.static("public"));
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use((req, res, next) => {
-  var header = { 'Access-Control-Allow-Origin': '*' }
+  var header = {"Access-Control-Allow-Origin": "*"};
   for (var i in req.headers) {
-    if (i.toLowerCase().substr(0, 15) === 'access-control-') {
-      header[i.replace(/-request-/g, '-allow-')] = req.headers[i]
+    if (i.toLowerCase().substr(0, 15) === "access-control-") {
+      header[i.replace(/-request-/g, "-allow-")] = req.headers[i];
     }
   }
-  res.header(header)
-  next()
-})
+  res.header(header);
+  next();
+});
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 // app.set('trust proxy', 1) // trust first proxy
 // app.use(session({
 //   secret: 'eec!secret',
@@ -47,20 +64,22 @@ app.use(bodyParser.json())
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use((req, res, next) => {
-  req.db = require('./lib/db')
-  next()
-})
+  req.db = require("./lib/db");
+  next();
+});
 
 // app.use((req, res, next) => {
 //   req.$socket = socket
 //   next()
 // })
 
-app.use('/api', require('./api'))
+app.use("/api", require("./api"));
 
 app.listen(config.port, () => {
-  console.log('ready to use ==> port:', config.port)
-})
+  console.log("ready to use ==> port:", config.port);
+});
+
+
 
 // setInterval(() => {
 //   let num = ('' + Math.floor(Math.random() * 1000000)).padStart(6, '0')
