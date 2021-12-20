@@ -6,12 +6,7 @@ module.exports = router;
 
 router.get("/get-place", async (req, res) => {
   try {
-    let rows = await req
-      .db("content_place")
-      .select("*")
-      .limit(1)
-      .where("active", 1)
-      .orderBy("id", "desc");
+    let rows = await req.db("content_place").select("*").where("active", 1);
     res.send({
       ok: true,
       list: rows,
@@ -30,21 +25,22 @@ router.post("/createAndUpdate-place", async (req, res) => {
         contentName: data.contentName,
         contentPreview: data.contentPreview,
         contentDetail: data.contentDetail,
-        photoCover: "",
+        photoCover: req.body.image,
         active: 1,
         createBy: "admin_01",
         createDate: currentdate,
         updateBy: null,
         updateDate: null,
       };
-      await req.db("content_place").insert(_insertContent);
+      let returnId = await req
+        .db("content_place")
+        .insert(_insertContent)
+        .returning("id");
       res.send({
-        ok: true,
+        ok: returnId,
       });
     } else {
       var currentdate = new Date();
-      // console.log(data.contentDetail);
-      // return
       await req.db("content_place").where("id", data.id).update({
         contentName: data.contentName,
         contentPreview: data.contentPreview,
@@ -52,6 +48,9 @@ router.post("/createAndUpdate-place", async (req, res) => {
         active: 1,
         updateBy: "admin_01",
         updateDate: currentdate,
+      });
+      res.send({
+        ok: "",
       });
     }
   } catch (e) {

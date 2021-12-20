@@ -4,10 +4,12 @@ const router = express.Router();
 module.exports = router;
 //     http://localhost:7000/api/student?class=1
 
-router.get("/get-place", async (req, res) => {
+
+router.get("/get-contact", async (req, res) => {
+
   try {
     let rows = await req
-      .db("content_place")
+      .db("content_contact")
       .select("*")
       .limit(1)
       .where("active", 1)
@@ -21,7 +23,8 @@ router.get("/get-place", async (req, res) => {
   }
 });
 
-router.post("/createAndUpdate-place", async (req, res) => {
+router.post("/createAndUpdate-contact", async (req, res) => {
+  
   let data = req.body.item;
   try {
     if (data.id == 0) {
@@ -37,7 +40,7 @@ router.post("/createAndUpdate-place", async (req, res) => {
         updateBy: null,
         updateDate: null,
       };
-      await req.db("content_place").insert(_insertContent);
+      await req.db("content_contact").insert(_insertContent);
       res.send({
         ok: true,
       });
@@ -45,7 +48,7 @@ router.post("/createAndUpdate-place", async (req, res) => {
       var currentdate = new Date();
       // console.log(data.contentDetail);
       // return
-      await req.db("content_place").where("id", data.id).update({
+      await req.db("content_contact").where("id", data.id).update({
         contentName: data.contentName,
         contentPreview: data.contentPreview,
         contentDetail: data.contentDetail,
@@ -59,11 +62,11 @@ router.post("/createAndUpdate-place", async (req, res) => {
   }
 });
 
-router.post("/update-place", async (req, res) => {
+router.post("/update-contact", async (req, res) => {
   let data = req.body;
   try {
     var currentdate = new Date();
-    await req.db("content_place").where("id", data.id).update({
+    await req.db("content_contact").where("id", data.id).update({
       contentName: data.contentName,
       contentDetail: data.contentDetail,
       active: 1,
@@ -78,7 +81,7 @@ router.post("/update-place", async (req, res) => {
   }
 });
 
-router.post("/delete-place", async (req, res) => {
+router.post("/delete-contact", async (req, res) => {
   let data = req.body;
   try {
     var currentdate = new Date();
@@ -88,7 +91,7 @@ router.post("/delete-place", async (req, res) => {
       updateBy: "admin_01",
       updateDate: currentdate,
     };
-    await req.db("content_place").where("id", data.id).update({
+    await req.db("content_contact").where("id", data.id).update({
       active: 0,
       createDate: currentdate,
       updateBy: "admin_01",
@@ -102,11 +105,11 @@ router.post("/delete-place", async (req, res) => {
   }
 });
 
-router.post("/get-content-place", async (req, res) => {
+router.post("/get-content-contact", async (req, res) => {
   let data = req.body;
   try {
     let rows = await req
-      .db("content_place")
+      .db("content_contact")
       .select("*")
       .where("active", 1)
       .where("id", data.id);

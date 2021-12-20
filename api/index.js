@@ -9,3 +9,4 @@ router.use("/news", require("./news"));
 router.use("/place", require("./place"));
 router.use("/souvenir", require("./souvenir"));
 router.use("/home", require("./home"));
+router.use("/contact", require("./contact"));
